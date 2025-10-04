@@ -68,7 +68,7 @@ const signup = async (req, res) => {
 
 // Function for Signin
 const signin = async (req, res) => {
-  try {
+  try {    
     const { email, password } = req.body;
 
     // Find user by email
