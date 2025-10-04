@@ -38,7 +38,10 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "user"
-    }
+    },
+    refreshToken: { 
+        type: String
+    },
 }, { timestamps: true });
 
 // Exported the user schema model
