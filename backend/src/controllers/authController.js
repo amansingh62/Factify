@@ -34,7 +34,7 @@ const signup = async (req, res) => {
     // Set cookies
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
       maxAge: 15 * 60 * 1000, 
     });
@@ -169,6 +169,7 @@ const logout = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // Exported all the route logics
 module.exports = {
