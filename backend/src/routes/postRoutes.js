@@ -7,13 +7,13 @@ const upload = require("../middleware/uploadMiddleware");
 const router = express.Router();
 
 // Route for post media uploads
-router.post("/home", authMiddleware, upload.fields([
+router.post("/", authMiddleware, upload.fields([
     { name: "image", maxCount: 3},
     { name: "video", maxCount: 1}
 ]), createPost);
 
 // Route for upvote, flag, comment
-router.get("/home", authMiddleware, getAllPosts);
+router.get("/", authMiddleware, getAllPosts);
 router.put("/:id/upvote", authMiddleware, upvotePost);
 router.put("/:id/flag", authMiddleware, flagPost);
 router.post("/:id/comment", authMiddleware, addComment);

@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./src/routes/authRoutes');
 const cookieParser = require('cookie-parser');
+const postRoutes = require('./src/routes/postRoutes');
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 // Created an authentication routes
 app.use("/auth", authRoutes);
+app.use("/api/posts", postRoutes);
 
 // Exported the app component
 module.exports = app;

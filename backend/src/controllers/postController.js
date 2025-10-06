@@ -72,7 +72,7 @@ const createPost = async (req, res) => {
 };
 
 // Function for getting all posts
-const getAllPost = async (req, res) => {
+const getAllPosts = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
@@ -162,4 +162,4 @@ const addComment = async (req, res) => {
 }
 
 // Exposted all the post creation functions
-module.exports = { createPost, getAllPost,  upvotePost, flagPost, addComment };
+module.exports = { createPost, getAllPosts,  upvotePost, flagPost, addComment };
