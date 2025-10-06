@@ -78,11 +78,11 @@ const getAllPosts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find({}, "text image video comments createdAt")
+    const posts = await Post.find({}, "text image video comments upvotes flags createdAt")
       .populate("user", "username email profilePic")
       .populate("comments.user", "username")
       .sort({ createdAt: -1 })
-      .skip(skip) 
+      .skip(skip)
       .limit(limit);
 
     const totalPosts = await Post.countDocuments();
@@ -106,60 +106,60 @@ const getAllPosts = async (req, res) => {
 
 // Function for voting the post
 const upvotePost = async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id);
-        if(!post) return res.status(404).json({ success: false, message: "Post not found" });
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: "Post not found" });
 
-        const userId = req.user.id;
-        if (post.upvotes.includes(userId)){
-            post.upvotes.pull(userId);
-        } else {
-            post.upvotes.push(userId);
-        }
-
-        await post.save();
-        res.json({ success: true, upvotes: post.upvotes.length });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+    const userId = req.user.id;
+    if (post.upvotes.includes(userId)) {
+      post.upvotes.pull(userId);
+    } else {
+      post.upvotes.push(userId);
     }
+
+    await post.save();
+    res.json({ success: true, upvotes: post.upvotes.length });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
 };
 
 // Function for flagging the post
 const flagPost = async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id);
-        if(!post) return res.status(404).json({ success: false, message: "Post not found" });
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: "Post not found" });
 
-        const userId = req.user.id;
-        if (post.flags.includes(userId)) {
-            post.flags.pull(userId)
-        } else {
-            post.flags.push(userId);
-        }
-
-        await post.save();
-        res.json({ success: true, flags: post.flags.length });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+    const userId = req.user.id;
+    if (post.flags.includes(userId)) {
+      post.flags.pull(userId)
+    } else {
+      post.flags.push(userId);
     }
+
+    await post.save();
+    res.json({ success: true, flags: post.flags.length });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
 };
 
 // Function for making comment on a post
 const addComment = async (req, res) => {
-    try {
-        const { text } = req.body;
-        const post = await Post.findById(req.params.id);
-        if(!post) return res.status(404).json({ success: false, message: "Post not found" });
+  try {
+    const { text } = req.body;
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: "Post not found" });
 
-        const comment = { user: req.user.id, text };
-        post.comments.push(comment);
-        await post.save();
+    const comment = { user: req.user.id, text };
+    post.comments.push(comment);
+    await post.save();
 
-        res.json({ success: true, message: "Comment added", comments: post.comments });
-    } catch (err) {
-       res.status(500).json({ success: false, message: err.message });
-    }
+    res.json({ success: true, message: "Comment added", comments: post.comments });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
 }
 
 // Exposted all the post creation functions
-module.exports = { createPost, getAllPosts,  upvotePost, flagPost, addComment };
+module.exports = { createPost, getAllPosts, upvotePost, flagPost, addComment };

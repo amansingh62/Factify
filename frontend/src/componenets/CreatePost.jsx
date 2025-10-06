@@ -54,9 +54,12 @@ export default function CreatePost({ onPostCreated }) {
     try {
       const formData = new FormData();
       formData.append("content", content);
-      if (file) formData.append("file", file);
+      if (file) {
+        const fieldName = file.type.startsWith('image/') ? 'image' : 'video';
+        formData.append(fieldName, file);
+      };
 
-      const res = await axios.post("/posts/create", formData, {
+      const res = await axios.post("/api/posts", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
