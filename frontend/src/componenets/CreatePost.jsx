@@ -53,7 +53,7 @@ export default function CreatePost({ onPostCreated }) {
 
     try {
       const formData = new FormData();
-      formData.append("content", content);
+      formData.append("text", content);
       if (file) {
         const fieldName = file.type.startsWith('image/') ? 'image' : 'video';
         formData.append(fieldName, file);
