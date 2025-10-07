@@ -1,7 +1,7 @@
 // Imported all required packages
 import { useState, useCallback, useEffect } from "react";
 import axios from "../utils/axiosInstance";
-import { X } from "lucide-react"; 
+import { X, Image, Video } from "lucide-react"; 
 
 // Function for creating post
 export default function CreatePost({ onPostCreated }) {
@@ -76,25 +76,54 @@ export default function CreatePost({ onPostCreated }) {
   }, [content, file, onPostCreated]);
 
   return (
-    <div className="max-w-lg mx-auto bg-white rounded-2xl shadow-md p-5 mt-5">
-      <h2 className="text-xl font-semibold mb-3 text-gray-800">Create a Post</h2>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <textarea
-          placeholder="What's on your mind?"
-          className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          rows="3"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          required
-        />
+    <div className="bg-black rounded-3xl shadow-2xl border border-gray-700 p-8 relative overflow-hidden hover:border-gray-600 transition-all duration-300">
+      <div className="relative z-10">
+        <h2 className="text-2xl font-bold mb-6 text-white tracking-tight">Create a Post</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-300 block">What's on your mind?</label>
+          <textarea
+            placeholder="Share your thoughts..."
+            className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 text-base"
+            rows="3"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
+        </div>
 
-        <input
-          type="file"
-          accept="image/*, video/*"
-          onChange={handleFileChange}
-          disabled={loading}
-          className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer p-2"
-        />
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-300 block">Add Media (Optional)</label>
+          <div className="flex gap-3">
+            <label className="flex-1 cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={loading}
+                className="hidden"
+              />
+              <div className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-gray-300 hover:bg-gray-700 hover:border-gray-500 transition-all duration-300">
+                <Image size={20} />
+                <span className="text-sm font-medium">Image</span>
+              </div>
+            </label>
+            
+            <label className="flex-1 cursor-pointer">
+              <input
+                type="file"
+                accept="video/*"
+                onChange={handleFileChange}
+                disabled={loading}
+                className="hidden"
+              />
+              <div className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-gray-300 hover:bg-gray-700 hover:border-gray-500 transition-all duration-300">
+                <Video size={20} />
+                <span className="text-sm font-medium">Video</span>
+              </div>
+            </label>
+          </div>
+        </div>
 
        {preview && (
   <div className="relative inline-block mt-3">
@@ -129,11 +158,12 @@ export default function CreatePost({ onPostCreated }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-200 disabled:opacity-60"
+          className="w-full bg-gray-700 text-white py-3 px-4 rounded-xl font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-base"
         >
           {loading ? "Posting..." : "Post"}
         </button>
       </form>
+      </div>
     </div>
   );
 }
