@@ -161,5 +161,25 @@ const addComment = async (req, res) => {
   }
 }
 
+// Function for deleting post
+const deletePost = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const userId = req.user.id;
+
+    const post = await Post.findById(postId);
+    if (!post) return res.json({ message: "Post not found" });
+
+    if (post.user.toString() !== userId) 
+      return res.status(401).json({ message: "Not authorized to delete this post" });
+
+    await Post.findByIdAndDelete(postId);
+
+    res.staus(200).json({ message: "Post deleted successfully"});
+  }  catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+}
+
 // Exposted all the post creation functions
-module.exports = { createPost, getAllPosts, upvotePost, flagPost, addComment };
+module.exports = { createPost, getAllPosts, upvotePost, flagPost, addComment, deletePost };
