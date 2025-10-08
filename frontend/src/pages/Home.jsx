@@ -1,14 +1,39 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../utils/axiosInstance";
 import CreatePost from "../componenets/CreatePost";
 import PostCard from "../componenets/PostCard";
 import { Bell, User, Settings } from "lucide-react";
 
 export default function Home() {
   const [refresh, setRefresh] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef(null);
+  const navigate = useNavigate();
 
   const handlePostCreated = () => {
     setRefresh(!refresh);
   };
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("/auth/logout");
+    } catch (error) {
+   console.error("Logout error:", error);
+    } finally {
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+        setShowSettings(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
 
   return (
     <div className="min-h-screen bg-black">
@@ -22,7 +47,7 @@ export default function Home() {
             </h1>
             
             {/* Navigation Icons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4" ref={settingsRef}>
               {/* Notifications */}
               <button className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-300 relative">
                 <Bell size={20} />
@@ -35,10 +60,27 @@ export default function Home() {
                 <User size={20} />
               </button>
               
-              {/* Settings */}
-              <button className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-300">
-                <Settings size={20} />
-              </button>
+              {/* Settings menu */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowSettings((v) => !v)}
+                  className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-300"
+                  aria-haspopup="menu"
+                  aria-expanded={showSettings}
+                >
+                  <Settings size={20} />
+                </button>
+                {showSettings && (
+                  <div className="absolute right-0 mt-2 w-36 bg-gray-900 border border-gray-700 rounded-xl shadow-xl py-1 z-50">
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-800 rounded-lg"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
