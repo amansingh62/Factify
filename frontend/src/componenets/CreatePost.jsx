@@ -92,10 +92,9 @@ export default function CreatePost({ onPostCreated }) {
           />
         </div>
 
-        <div className="space-y-1">
-          <label className="text-sm font-medium text-gray-300 block">Add Media (Optional)</label>
+        <div>
           <div className="flex gap-3">
-            <label className="flex-1 cursor-pointer">
+            <label className="cursor-pointer" aria-label="Upload image">
               <input
                 type="file"
                 accept="image/*"
@@ -103,13 +102,11 @@ export default function CreatePost({ onPostCreated }) {
                 disabled={loading}
                 className="hidden"
               />
-              <div className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-gray-300 hover:bg-gray-700 hover:border-gray-500 transition-all duration-300">
-                <Image size={20} />
-                <span className="text-sm font-medium">Image</span>
+              <div className="flex items-center justify-center p-3 bg-gray-800 border border-gray-600 rounded-full text-gray-300 hover:bg-gray-700 hover:border-gray-500 hover:shadow-lg transition-all duration-300">
+                <Image size={22} />
               </div>
             </label>
-            
-            <label className="flex-1 cursor-pointer">
+            <label className="cursor-pointer" aria-label="Upload video">
               <input
                 type="file"
                 accept="video/*"
@@ -117,9 +114,8 @@ export default function CreatePost({ onPostCreated }) {
                 disabled={loading}
                 className="hidden"
               />
-              <div className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-gray-300 hover:bg-gray-700 hover:border-gray-500 transition-all duration-300">
-                <Video size={20} />
-                <span className="text-sm font-medium">Video</span>
+              <div className="flex items-center justify-center p-3 bg-gray-800 border border-gray-600 rounded-full text-gray-300 hover:bg-gray-700 hover:border-gray-500 hover:shadow-lg transition-all duration-300">
+                <Video size={22} />
               </div>
             </label>
           </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CreatePost from "../componenets/CreatePost";
-import PostFeed from "../componenets/PostCard";
+import PostCard from "../componenets/PostCard";
 import { Bell, User, Settings } from "lucide-react";
 
 export default function Home() {
@@ -46,9 +46,9 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="pt-20 pb-8">
-        <div className="max-w-2xl mx-auto px-4 space-y-6">
+        <div className="max-w-4xl mx-auto px-4 space-y-6">
           <CreatePost onPostCreated={handlePostCreated} />
-          <PostFeed key={refresh} />
+          <PostCard key={refresh} />
         </div>
       </div>
     </div>

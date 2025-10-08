@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "../utils/axiosInstance";
-import { Trash2 } from "lucide-react";
+import { Trash2, ArrowUp, Flag, MessageSquare } from "lucide-react";
 
-export default function PostFeed() {
+export default function PostCard() {
   const [posts, setPosts] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, postId: null });
+  const [expandedCommentsByPost, setExpandedCommentsByPost] = useState({});
+  const [commentTextByPost, setCommentTextByPost] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +54,22 @@ export default function PostFeed() {
       fetchPosts();
     } catch (error) {
       console.error("Error flagging post:", error);
+    }
+  };
+
+  const toggleComments = (id) => {
+    setExpandedCommentsByPost((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleAddComment = async (id) => {
+    const text = (commentTextByPost[id] || "").trim();
+    if (!text) return;
+    try {
+      await axios.post(`/api/posts/${id}/comment`, { text });
+      setCommentTextByPost((prev) => ({ ...prev, [id]: "" }));
+      await fetchPosts();
+    } catch (error) {
+      console.error("Error adding comment:", error);
     }
   };
 
@@ -139,25 +157,71 @@ export default function PostFeed() {
               />
             ) : null}
 
-            <div className="flex justify-between items-center pt-4 border-t border-gray-600">
+            <div className="flex items-center gap-4 pt-4 border-t border-gray-600">
               <button
                 onClick={() => handleUpvote(post._id)}
                 className="flex items-center gap-2 text-gray-300 hover:text-blue-400 transition-colors px-3 py-2 rounded-lg hover:bg-blue-900"
+                title="Upvote"
               >
-                👍 <span className="font-medium">{post.upvotes?.length ?? 0}</span>
+                <ArrowUp size={18} />
+                <span className="font-medium">{post.upvotes?.length ?? 0}</span>
+              </button>
+
+              <button
+                onClick={() => toggleComments(post._id)}
+                className="flex items-center gap-2 text-gray-300 hover:text-green-400 transition-colors px-3 py-2 rounded-lg hover:bg-green-900"
+                title="Comments"
+              >
+                <MessageSquare size={18} />
+                <span className="font-medium">{post.comments?.length ?? 0}</span>
               </button>
 
               <button
                 onClick={() => handleFlag(post._id)}
                 className="flex items-center gap-2 text-gray-300 hover:text-red-400 transition-colors px-3 py-2 rounded-lg hover:bg-red-900"
+                title="Flag"
               >
-                🚩 <span className="font-medium">{post.flags?.length ?? 0}</span>
+                <Flag size={18} />
+                <span className="font-medium">{post.flags?.length ?? 0}</span>
               </button>
-
-              <div className="text-gray-300 px-3 py-2">
-                <span className="font-medium">{post.comments?.length ?? 0}</span> comments
-              </div>
             </div>
+
+            {expandedCommentsByPost[post._id] && (
+              <div className="mt-4">
+                <div className="space-y-3">
+                  {post.comments && post.comments.length > 0 ? (
+                    post.comments.map((c) => (
+                      <div key={c._id || c.createdAt} className="bg-gray-700/60 border border-gray-600 rounded-xl p-3">
+                        <div className="text-sm text-gray-200">
+                          <span className="font-semibold">{c.user?.username ?? "Anonymous"}</span>
+                        </div>
+                        <div className="text-gray-300 text-sm mt-1">{c.text}</div>
+                        <div className="text-gray-500 text-xs mt-1">{new Date(c.createdAt).toLocaleString()}</div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 text-sm">No comments yet. Be the first to comment.</div>
+                  )}
+                </div>
+
+                <div className="mt-3 flex items-center gap-2">
+                  <input
+                    value={commentTextByPost[post._id] || ""}
+                    onChange={(e) =>
+                      setCommentTextByPost((prev) => ({ ...prev, [post._id]: e.target.value }))
+                    }
+                    placeholder="Write a comment..."
+                    className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent"
+                  />
+                  <button
+                    onClick={() => handleAddComment(post._id)}
+                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors"
+                  >
+                    Post
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       ))}
@@ -193,6 +257,8 @@ export default function PostFeed() {
           </div>
         </div>
       )}
+
+      {/* Inline comments only; modal removed as per request */}
     </div>
   );
 }
