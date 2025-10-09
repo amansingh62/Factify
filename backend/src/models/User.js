@@ -42,6 +42,17 @@ const userSchema = new mongoose.Schema({
     refreshToken: { 
         type: String
     },
+
+    bio: {
+        type: String,
+        trim: true,
+        default: ""
+    },
+
+    profilePic: {
+        type: String,
+        default: ""
+    }
 }, { timestamps: true });
 
 // Exported the user schema model
