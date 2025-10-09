@@ -4,7 +4,7 @@ const cors = require('cors');
 const authRoutes = require('./src/routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const postRoutes = require('./src/routes/postRoutes');
-
+const profileRoutes = require('./src/routes/profileRoutes');
 const app = express();
 
 // Setup some middlewares for cross origin, json payloads and url-encoded payloads respectively
@@ -19,6 +19,7 @@ app.use(cookieParser());
 // Created an authentication routes
 app.use("/auth", authRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/profile", profileRoutes)
 
 // Exported the app component
 module.exports = app;
