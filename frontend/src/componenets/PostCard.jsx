@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import { Trash2, ArrowUp, Flag, MessageSquare } from "lucide-react";
 
@@ -9,6 +10,7 @@ export default function PostCard() {
   const [expandedCommentsByPost, setExpandedCommentsByPost] = useState({});
   const [commentTextByPost, setCommentTextByPost] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPosts();
@@ -122,9 +124,12 @@ export default function PostCard() {
             {/* Header with author and delete button */}
             <div className="flex justify-between items-center mb-4">
               {post.user?.username && (
-                <div className="text-sm font-semibold text-white">
+                <button
+                  onClick={() => navigate(`/u/${post.user.username}`)}
+                  className="text-sm font-semibold text-white hover:underline"
+                >
                   by {post.user.username}
-                </div>
+                </button>
               )}
               {currentUser && post.user && currentUser.id === post.user._id && (
                 <button

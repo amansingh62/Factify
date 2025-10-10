@@ -56,7 +56,7 @@ export default function Home() {
               </button>
               
               {/* Profile */}
-              <button className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-300">
+              <button onClick={() => navigate('/profile')} className="p-2 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-300">
                 <User size={20} />
               </button>
               
