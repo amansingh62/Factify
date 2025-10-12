@@ -155,7 +155,11 @@ const addComment = async (req, res) => {
     post.comments.push(comment);
     await post.save();
 
-    res.json({ success: true, message: "Comment added", comments: post.comments });
+    const updatedPost= await Post.findById(req.params.id)
+    .populate("user", "username profilePic")
+    .populate("comments.user", "username profilePc")
+
+    res.json({ success: true, message: "Comment added", comments: updatedPost.comments });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
