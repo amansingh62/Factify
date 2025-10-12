@@ -3,19 +3,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "../utils/axiosInstance";
 import { Trash2, ArrowUp, Flag, MessageSquare } from "lucide-react";
 
-export default function PostCard() {
-  const [posts, setPosts] = useState([]);
+export default function PostCard({ posts: propPosts }) {
+  const [posts, setPosts] = useState(propPosts || []);
   const [currentUser, setCurrentUser] = useState(null);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, postId: null });
   const [expandedCommentsByPost, setExpandedCommentsByPost] = useState({});
   const [commentTextByPost, setCommentTextByPost] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!propPosts);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPosts();
+    if (!propPosts) {
+      fetchPosts();
+    } else {
+      setPosts(propPosts);
+      setLoading(false);
+    }
     fetchCurrentUser();
-  }, []);
+  }, [propPosts]);
 
   const fetchCurrentUser = async () => {
     try {
@@ -43,8 +48,15 @@ export default function PostCard() {
 
   const handleUpvote = async (id) => {
     try {
-      await axios.put(`/api/posts/${id}/upvote`);
-      fetchPosts();
+      const res = await axios.put(`/api/posts/${id}/upvote`);
+      // Update the specific post in the posts array
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post._id === id 
+            ? { ...post, upvotes: Array(res.data.upvotes).fill(null) }
+            : post
+        )
+      );
     } catch (error) {
       console.error("Error upvoting post:", error);
     }
@@ -52,8 +64,15 @@ export default function PostCard() {
 
   const handleFlag = async (id) => {
     try {
-      await axios.put(`/api/posts/${id}/flag`);
-      fetchPosts();
+      const res = await axios.put(`/api/posts/${id}/flag`);
+      // Update the specific post in the posts array
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post._id === id 
+            ? { ...post, flags: Array(res.data.flags).fill(null) }
+            : post
+        )
+      );
     } catch (error) {
       console.error("Error flagging post:", error);
     }
@@ -67,9 +86,16 @@ export default function PostCard() {
     const text = (commentTextByPost[id] || "").trim();
     if (!text) return;
     try {
-      await axios.post(`/api/posts/${id}/comment`, { text });
+      const res = await axios.post(`/api/posts/${id}/comment`, { text });
       setCommentTextByPost((prev) => ({ ...prev, [id]: "" }));
-      await fetchPosts();
+      // Update the specific post in the posts array
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post._id === id 
+            ? { ...post, comments: res.data.comments || post.comments }
+            : post
+        )
+      );
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -88,7 +114,8 @@ export default function PostCard() {
     
     try {
       await axios.delete(`/api/posts/${deleteModal.postId}`);
-      fetchPosts(); // Refresh the posts list
+      // Remove the deleted post from the posts array
+      setPosts(prevPosts => prevPosts.filter(post => post._id !== deleteModal.postId));
       closeDeleteModal();
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -262,8 +289,6 @@ export default function PostCard() {
           </div>
         </div>
       )}
-
-      {/* Inline comments only; modal removed as per request */}
     </div>
   );
 }

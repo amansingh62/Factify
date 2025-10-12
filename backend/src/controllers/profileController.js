@@ -7,7 +7,10 @@ const imagekit = require("../utils/imagekit");
 const getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password -refreshToken");
-    const posts = await Post.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const posts = await Post.find({ user: req.user.id })
+      .populate("user", "username email profilePic")
+      .populate("comments.user", "username")
+      .sort({ createdAt: -1 });
     res.json({
       user,
       stats: { totalPosts: posts.length },
@@ -29,7 +32,10 @@ const getPublicProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const posts = await Post.find({ user: user._id }).sort({ createdAt: -1 });
+    const posts = await Post.find({ user: user._id })
+      .populate("user", "username email profilePic")
+      .populate("comments.user", "username")
+      .sort({ createdAt: -1 });
     return res.json({
       user,
       stats: { totalPosts: posts.length },

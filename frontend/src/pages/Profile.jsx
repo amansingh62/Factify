@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../utils/axiosInstance";
+import PostCard from "../componenets/PostCard";
 
 export default function Profile() {
     const [user, setUser] = useState(null);
@@ -131,15 +132,10 @@ export default function Profile() {
                     <div className="mt-6 text-sm text-gray-400">Posts: {posts.length}</div>
                 </div>
 
-                <div className="mt-6 space-y-4">
-                    {posts.map((p) => (
-                        <div key={p._id} className="bg-gray-900 border border-gray-800 rounded-2xl p-4">
-                            {p.text && <div className="text-gray-100 mb-2">{p.text}</div>}
-                            {p.image && <img src={p.image} className="w-full rounded-xl" alt="post" />}
-                            {p.video && <video src={p.video} controls className="w-full rounded-xl" />}
-                        </div>
-                    ))}
-                    {posts.length === 0 && (
+                <div className="mt-6">
+                    {posts.length > 0 ? (
+                        <PostCard posts={posts} />
+                    ) : (
                         <div className="text-center text-gray-500">No posts yet.</div>
                     )}
                 </div>
