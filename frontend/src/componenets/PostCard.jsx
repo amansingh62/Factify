@@ -148,16 +148,38 @@ export default function PostCard({ posts: propPosts }) {
           className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-600 p-6 hover:shadow-xl hover:border-gray-500 transition-all duration-300 relative overflow-hidden transform hover:scale-[1.01]"
         >
           <div className="relative z-10">
-            {/* Header with author and delete button */}
+            {/* Header with author, badge, and delete button */}
             <div className="flex justify-between items-center mb-4">
-              {post.user?.username && (
-                <button
-                  onClick={() => navigate(`/u/${post.user.username}`)}
-                  className="text-sm font-semibold text-white hover:underline"
-                >
-                  by {post.user.username}
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {post.user?.username && (
+                  <button
+                    onClick={() => navigate(`/u/${post.user.username}`)}
+                    className="text-sm font-semibold text-white hover:underline"
+                  >
+                    by {post.user.username}
+                  </button>
+                )}
+                {(post.factCheckScore != null || post.factCheckLabel) && (
+                  (() => {
+                    const score = post.factCheckScore;
+                    const label = post.factCheckLabel || "unverified";
+                    let color = "bg-gray-700 text-gray-200 border-gray-600";
+                    if (label === "verified" || (typeof score === "number" && score >= 70)) {
+                      color = "bg-green-900/60 text-green-300 border-green-700";
+                    } else if (label === "mixed" || (typeof score === "number" && score >= 40)) {
+                      color = "bg-yellow-900/60 text-yellow-300 border-yellow-700";
+                    } else if (label === "suspect" || (typeof score === "number" && score < 40)) {
+                      color = "bg-red-900/60 text-red-300 border-red-700";
+                    }
+                    const text = typeof score === "number" ? `${label} ${score}%` : label;
+                    return (
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${color}`} title="AI fact-check">
+                        {text}
+                      </span>
+                    );
+                  })()
+                )}
+              </div>
               {currentUser && post.user && currentUser.id === post.user._id && (
                 <button
                   onClick={() => openDeleteModal(post._id)}
@@ -168,30 +190,6 @@ export default function PostCard({ posts: propPosts }) {
                 </button>
               )}
             </div>
-
-            {/* Fact-check badge */}
-            {(post.factCheckScore != null || post.factCheckLabel) && (
-              <div className="absolute top-4 right-4 flex items-center gap-2">
-                {(() => {
-                  const score = post.factCheckScore;
-                  const label = post.factCheckLabel || "unverified";
-                  let color = "bg-gray-700 text-gray-200 border-gray-600";
-                  if (label === "verified" || (typeof score === "number" && score >= 70)) {
-                    color = "bg-green-900/60 text-green-300 border-green-700";
-                  } else if (label === "mixed" || (typeof score === "number" && score >= 40)) {
-                    color = "bg-yellow-900/60 text-yellow-300 border-yellow-700";
-                  } else if (label === "suspect" || (typeof score === "number" && score < 40)) {
-                    color = "bg-red-900/60 text-red-300 border-red-700";
-                  }
-                  const text = typeof score === "number" ? `${label} ${score}%` : label;
-                  return (
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${color}`} title="AI fact-check">
-                      {text}
-                    </span>
-                  );
-                })()}
-              </div>
-            )}
 
             {/* Text content */}
             {post.text && (
