@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Subtle gradient background and improved base typography */
+body {
+    background: radial-gradient(1200px 800px at 20% 0%, rgba(37, 99, 235, 0.08), transparent 60%),
+        radial-gradient(1000px 700px at 80% 20%, rgba(99, 102, 241, 0.08), transparent 60%),
+        #000;
+    color: #e5e7eb;
+    /* tailwind gray-200 */
+}
+
 /* Hide scrollbar globally */
 html {
     -ms-overflow-style: none;

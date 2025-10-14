@@ -89,6 +89,17 @@ export default function Home() {
       {/* Main Content */}
       <div className="pt-20 pb-8">
         <div className="max-w-4xl mx-auto px-4 space-y-6">
+          {/* Page heading above create form */}
+          <div className="flex items-center justify-center select-none">
+            <div className="w-full flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+              <h2 className="text-center text-gray-100 font-extrabold tracking-wide text-lg uppercase">
+                Post Only Facts
+              </h2>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+            </div>
+          </div>
+
           <CreatePost onPostCreated={handlePostCreated} />
           <PostCard key={refresh} />
         </div>

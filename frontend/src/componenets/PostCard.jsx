@@ -145,7 +145,7 @@ export default function PostCard({ posts: propPosts }) {
       {posts.map((post) => (
         <div
           key={post._id}
-          className="bg-gray-800 rounded-3xl shadow-2xl border border-gray-600 p-6 hover:shadow-xl hover:border-gray-500 transition-all duration-300 relative overflow-hidden transform hover:scale-[1.01]"
+          className="bg-gray-900 rounded-3xl shadow-xl border border-gray-700 p-6 hover:shadow-2xl hover:border-gray-500 transition-all duration-300 relative overflow-hidden"
         >
           <div className="relative z-10">
             {/* Header with author, badge, and delete button */}

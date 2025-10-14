@@ -76,15 +76,16 @@ export default function CreatePost({ onPostCreated }) {
   }, [content, file, onPostCreated]);
 
   return (
-    <div className="bg-black rounded-3xl shadow-2xl border border-gray-700 p-8 relative overflow-hidden hover:border-gray-600 transition-all duration-300">
+    <div className="bg-gradient-to-b from-gray-900 to-black rounded-3xl shadow-2xl border border-gray-700 p-8 relative overflow-hidden hover:border-gray-600 transition-all duration-300">
       <div className="relative z-10">
-        <h2 className="text-2xl font-bold mb-6 text-white tracking-tight">Create a Post</h2>
+        <h2 className="text-2xl font-bold mb-2 text-white tracking-tight">Create a Post</h2>
+        <p className="text-sm text-gray-400 mb-6">Share accurate information. Our AI will help verify it.</p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-300 block">What's on your mind?</label>
           <textarea
-            placeholder="Share your thoughts..."
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 text-base"
+            placeholder="Post only facts. Add sources if possible..."
+            className="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/40 transition-all duration-300 text-base"
             rows="3"
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -154,9 +155,9 @@ export default function CreatePost({ onPostCreated }) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gray-700 text-white py-3 px-4 rounded-xl font-medium hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-base"
+          className="w-full bg-black text-white py-3 px-4 rounded-xl font-semibold border border-gray-700 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-400/60 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-base"
         >
-          {loading ? "Posting..." : "Post"}
+          {loading ? "Poblshing..." : "Publish"}
         </button>
       </form>
       </div>
