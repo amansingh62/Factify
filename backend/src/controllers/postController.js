@@ -1,6 +1,7 @@
 // Imported all required packages
 const Post = require("../models/Post");
 const imageKit = require("../utils/imagekit");
+const { scoreTextAuthenticity } = require("../services/aiService");
 
 // Function for creating the post
 const createPost = async (req, res) => {
@@ -47,12 +48,17 @@ const createPost = async (req, res) => {
       }
     }
 
+    // AI fact-check
+    const { score: factCheckScore, label: factCheckLabel } = await scoreTextAuthenticity(text || "");
+
     // Save post
     const newPost = new Post({
       user: userId,
       text,
       image,
       video,
+      factCheckScore,
+      factCheckLabel,
     });
 
     await newPost.save();
@@ -78,7 +84,7 @@ const getAllPosts = async (req, res) => {
     const limit = parseInt(req.query.limit) || 20;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find({}, "text image video comments upvotes flags createdAt")
+    const posts = await Post.find({}, "text image video comments upvotes flags createdAt factCheckScore factCheckLabel")
       .populate("user", "username email profilePic")
       .populate("comments.user", "username")
       .sort({ createdAt: -1 })
@@ -155,9 +161,9 @@ const addComment = async (req, res) => {
     post.comments.push(comment);
     await post.save();
 
-    const updatedPost= await Post.findById(req.params.id)
-    .populate("user", "username profilePic")
-    .populate("comments.user", "username profilePc")
+    const updatedPost = await Post.findById(req.params.id)
+      .populate("user", "username profilePic")
+      .populate("comments.user", "username profilePc")
 
     res.json({ success: true, message: "Comment added", comments: updatedPost.comments });
   } catch (err) {
@@ -174,13 +180,13 @@ const deletePost = async (req, res) => {
     const post = await Post.findById(postId);
     if (!post) return res.json({ message: "Post not found" });
 
-    if (post.user.toString() !== userId) 
+    if (post.user.toString() !== userId)
       return res.status(401).json({ message: "Not authorized to delete this post" });
 
     await Post.findByIdAndDelete(postId);
 
-    res.status(200).json({ message: "Post deleted successfully"});
-  }  catch (error) {
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
 }

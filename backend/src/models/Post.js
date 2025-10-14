@@ -32,11 +32,24 @@ const postSchema = new mongoose.Schema({
 
     comments: [
         {
-            user: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+            user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
             text: { type: String, trim: true },
             createdAt: { type: Date, default: Date.now },
         }
     ],
+
+    // AI fact-check fields
+    factCheckScore: {
+        type: Number,
+        min: 0,
+        max: 100,
+        default: null
+    },
+    factCheckLabel: {
+        type: String,
+        enum: ["unverified", "suspect", "mixed", "verified"],
+        default: "unverified"
+    }
 }, { timestamps: true });
 
 // Exported the postschema model

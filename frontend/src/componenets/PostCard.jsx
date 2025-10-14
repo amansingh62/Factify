@@ -169,6 +169,30 @@ export default function PostCard({ posts: propPosts }) {
               )}
             </div>
 
+            {/* Fact-check badge */}
+            {(post.factCheckScore != null || post.factCheckLabel) && (
+              <div className="absolute top-4 right-4 flex items-center gap-2">
+                {(() => {
+                  const score = post.factCheckScore;
+                  const label = post.factCheckLabel || "unverified";
+                  let color = "bg-gray-700 text-gray-200 border-gray-600";
+                  if (label === "verified" || (typeof score === "number" && score >= 70)) {
+                    color = "bg-green-900/60 text-green-300 border-green-700";
+                  } else if (label === "mixed" || (typeof score === "number" && score >= 40)) {
+                    color = "bg-yellow-900/60 text-yellow-300 border-yellow-700";
+                  } else if (label === "suspect" || (typeof score === "number" && score < 40)) {
+                    color = "bg-red-900/60 text-red-300 border-red-700";
+                  }
+                  const text = typeof score === "number" ? `${label} ${score}%` : label;
+                  return (
+                    <span className={`px-3 py-1 text-xs font-semibold rounded-full border ${color}`} title="AI fact-check">
+                      {text}
+                    </span>
+                  );
+                })()}
+              </div>
+            )}
+
             {/* Text content */}
             {post.text && (
               <p className="text-gray-100 mb-4 text-base leading-relaxed">{post.text}</p>
