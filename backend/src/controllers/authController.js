@@ -37,6 +37,7 @@ const signup = async (req, res) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
+      partitioned: isProduction
     };
 
     res.cookie("accessToken", accessToken, {
@@ -72,10 +73,6 @@ const signup = async (req, res) => {
 // Function for Signin
 const signin = async (req, res) => {
   try {
-    console.log("🔍 Environment check:");
-    console.log("NODE_ENV:", process.env.NODE_ENV);
-    console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
-    console.log("Cookie will be secure:", process.env.NODE_ENV === "production");
     const { email, password } = req.body;
 
     // Find user by email
@@ -98,6 +95,7 @@ const signin = async (req, res) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
+      partitioned: isProduction
     };
 
     res.cookie("accessToken", accessToken, {
@@ -150,6 +148,7 @@ const refresh = async (req, res) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
+      partitioned: isProduction
     };
     res.cookie("accessToken", newAccessToken, {
       ...cookieBase,
