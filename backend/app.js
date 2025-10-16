@@ -7,9 +7,14 @@ const postRoutes = require('./src/routes/postRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');
 const app = express();
 
+// In production behind a proxy (e.g., Render), trust proxy so Secure cookies work
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 // Setup some middlewares for cross origin, json payloads and url-encoded payloads respectively
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173", 
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true,
 }));
 app.use(express.json());

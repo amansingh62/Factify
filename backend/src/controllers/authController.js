@@ -1,6 +1,6 @@
 // Imported all the required packages
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); 
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { generateToken, generateRefreshToken } = require("../utils/jwtHelper");
 
@@ -11,7 +11,7 @@ const signup = async (req, res) => {
 
     // Check if email or username already exists
     const exists = await User.findOne({ $or: [{ email }, { username }] });
-    if (exists) 
+    if (exists)
       return res.status(400).json({ message: "Email or Username already taken" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,17 +32,20 @@ const signup = async (req, res) => {
     await newUser.save();
 
     // Set cookies
-    res.cookie("accessToken", accessToken, {
+    const isProduction = process.env.NODE_ENV === "production";
+    const cookieBase = {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000, 
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieBase,
+      maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      ...cookieBase,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -60,7 +63,7 @@ const signup = async (req, res) => {
         refreshToken
       }
     });
-    
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -68,7 +71,7 @@ const signup = async (req, res) => {
 
 // Function for Signin
 const signin = async (req, res) => {
-  try {    
+  try {
     const { email, password } = req.body;
 
     // Find user by email
@@ -86,17 +89,20 @@ const signin = async (req, res) => {
     await user.save();
 
     // Set cookies
-    res.cookie("accessToken", accessToken, {
+    const isProduction = process.env.NODE_ENV === "production";
+    const cookieBase = {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieBase,
       maxAge: 15 * 60 * 1000,
     });
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      ...cookieBase,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -114,7 +120,7 @@ const signin = async (req, res) => {
         refreshToken
       }
     });
-    
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -135,10 +141,14 @@ const refresh = async (req, res) => {
 
     const newAccessToken = generateToken(user);
 
-    res.cookie("accessToken", newAccessToken, {
+    const isProduction = process.env.NODE_ENV === "production";
+    const cookieBase = {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    };
+    res.cookie("accessToken", newAccessToken, {
+      ...cookieBase,
       maxAge: 15 * 60 * 1000,
     });
 
@@ -162,8 +172,14 @@ const logout = async (req, res) => {
       }
     }
 
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    const isProduction = process.env.NODE_ENV === "production";
+    const clearOpts = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    };
+    res.clearCookie("accessToken", clearOpts);
+    res.clearCookie("refreshToken", clearOpts);
     res.json({ message: "Logged out successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
