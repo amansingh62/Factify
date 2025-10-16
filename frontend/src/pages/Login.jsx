@@ -19,12 +19,16 @@ export default function Login() {
     setIsLoading(true);
     
     try {
-      const res = await axios.post("/auth/signin", form, { withCredentials: true });
+      const res = await axios.post("/auth/signin", form);
+      console.log("Login response:", res.data);
+      console.log("Login response headers:", res.headers);
 
       setSuccess(res.data.message || "Login successful");
 
       setTimeout(() => navigate("/home"), 1000);
     } catch (err) {
+      console.error("Login error:", err);
+      console.error("Login error response:", err.response?.data);
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setIsLoading(false);

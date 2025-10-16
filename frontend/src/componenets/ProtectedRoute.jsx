@@ -11,13 +11,16 @@ export default function ProtectedRoute({ children }) {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-        const res = await axios.get("/auth/verify", { withCredentials: true });
+        const res = await axios.get("/auth/verify");
+        console.log("Auth verification response:", res.data);
         if(res.data.success){
           setAuth(true);
         } else {
           setAuth(false);
         }
-      } catch {
+      } catch (error) {
+        console.error("Auth verification failed:", error);
+        console.error("Error response:", error.response?.data);
         setAuth(false);
       }
     };
