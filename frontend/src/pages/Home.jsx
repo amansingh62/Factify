@@ -42,9 +42,12 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <h1 className="text-2xl font-bold text-white">
-              <span className="text-gray-400 text-sm font-medium tracking-wide">powered by </span>Factify
-            </h1>
+            <div className="flex items-center gap-1">
+              <h1 className="text-2xl font-bold text-white">
+                <span className="text-gray-400 text-sm font-medium tracking-wide">powered by </span>Factify
+              </h1>
+              <img src="/factify.png" alt="Factify Logo" className="h-7 w-7 mt-3" />
+            </div>
             
             {/* Navigation Icons */}
             <div className="flex items-center gap-4" ref={settingsRef}>
