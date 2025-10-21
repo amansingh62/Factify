@@ -49,8 +49,8 @@ export default function Login() {
                   <span className="text-gray-400 text-sm font-medium tracking-wide">powered by </span>Factify
                 </h1>
               </div>
-              <h2 className="text-2xl font-bold text-black mb-2 tracking-tight">Welcome back</h2>
-              <p className="text-gray-500 text-sm">Sign in to your account to continue</p>
+              <h2 className="text-2xl font-semibold text-black mb-2 tracking-tight">Welcome back</h2>
+              <p className="text-gray-500 text-base font-medium">Sign in to your account to continue</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

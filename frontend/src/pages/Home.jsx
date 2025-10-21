@@ -43,10 +43,10 @@ export default function Home() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center gap-1">
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-3xl font-bold text-white tracking-tight">
                 <span className="text-gray-400 text-sm font-medium tracking-wide">powered by </span>Factify
               </h1>
-              <img src="/factify.png" alt="Factify Logo" className="h-7 w-7 mt-3" />
+              <img src="/factify.png" alt="Factify Logo" className="h-8 w-8" />
             </div>
             
             {/* Navigation Icons */}
@@ -96,7 +96,7 @@ export default function Home() {
           <div className="flex items-center justify-center select-none">
             <div className="w-full flex items-center gap-3">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
-              <h2 className="text-center text-gray-100 font-extrabold tracking-wide text-lg uppercase">
+              <h2 className="text-center text-gray-100 font-bold tracking-wide text-xl uppercase">
                 Post Only Facts
               </h2>
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent" />

@@ -44,8 +44,8 @@ export default function SignUp() {
                   <span className="text-gray-400 text-sm font-medium tracking-wide">powered by </span>Factify
                 </h1>
               </div>
-              <h2 className="text-2xl font-bold text-black mb-2 tracking-tight">Create Account</h2>
-              <p className="text-gray-500 text-sm">Join us and start your journey</p>
+              <h2 className="text-2xl font-semibold text-black mb-2 tracking-tight">Create Account</h2>
+              <p className="text-gray-500 text-base font-medium">Join us and start your journey</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

@@ -1,11 +1,30 @@
 @import "tailwindcss";
 
+/* Beautiful font families */
+* {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* Headings use Poppins for more personality */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+}
+
 /* Subtle gradient background and improved base typography */
 body {
     background: radial-gradient(1200px 800px at 20% 0%, rgba(37, 99, 235, 0.08), transparent 60%),
         radial-gradient(1000px 700px at 80% 20%, rgba(99, 102, 241, 0.08), transparent 60%),
         #000;
     color: #e5e7eb;
+    font-weight: 400;
+    line-height: 1.6;
     /* tailwind gray-200 */
 }
 
