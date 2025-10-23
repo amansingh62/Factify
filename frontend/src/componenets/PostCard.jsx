@@ -193,7 +193,7 @@ export default function PostCard({ posts: propPosts }) {
 
             {/* Text content */}
             {post.text && (
-              <p className="text-gray-100 mb-4 text-base leading-relaxed">{post.text}</p>
+              <p className="text-gray-100 mb-4 text-base leading-relaxed whitespace-pre-wrap">{post.text}</p>
             )}
 
             {/* Media content */}
