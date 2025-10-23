@@ -1,6 +1,7 @@
 // Imported required packages
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const authRoutes = require('./src/routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const postRoutes = require('./src/routes/postRoutes');
@@ -27,6 +28,14 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/profile", profileRoutes)
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Catch-all handler: send back React's index.html file for any non-API routes
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 // Exported the app component
 module.exports = app;
