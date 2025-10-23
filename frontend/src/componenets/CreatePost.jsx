@@ -157,7 +157,7 @@ export default function CreatePost({ onPostCreated }) {
           disabled={loading}
           className="w-full bg-black text-white py-3 px-4 rounded-xl font-semibold border border-gray-700 hover:bg-white hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-400/60 focus:ring-offset-2 focus:ring-offset-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed text-base"
         >
-          {loading ? "Poblshing..." : "Publish"}
+          {loading ? "Publishing..." : "Publish"}
         </button>
       </form>
       </div>
